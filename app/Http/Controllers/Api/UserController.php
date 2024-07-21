@@ -49,7 +49,7 @@ class UserController extends Controller
 
         $token = $user->createToken('token', ['admin'])->plainTextToken;
 
-        event(new UserRegistered($user));
+        //event(new UserRegistered($user));
 
         return response()->json(['user' => $user, 'token' => $token ?? ''], 201);
     }
@@ -57,7 +57,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): JsonResponse
+    public function show(string $id): User
     {
         return User::findOrFail($id);
     }
