@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+
+  app:
+    image: jegramos/php8.2-fpm-nginx
+    container_name: app
+    volumes:
+      - ./:/var/www
+
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "8080:80"
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: laravel_db
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./database/docker:/var/lib/mysql
+    ports:
+        - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_laravel
+    ports:
+      - '7777:80'
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+    depends_on:
+      - mysql
